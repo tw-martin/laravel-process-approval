@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         $tenantField = config('process_approval.multi_tenancy_field', 'tenant_id');
-        Schema::table('process_approval_flow_steps', static function (Blueprint $table) {
+        Schema::table('process_approval_flow_steps', static function (Blueprint $table) use($tenantField) {
             $table->string($tenantField, 38)->index()->nullable()->after('active');
         });
-        Schema::table('process_approvals', static function (Blueprint $table) {
+        Schema::table('process_approvals', static function (Blueprint $table) use($tenantField) {
             $table->string($tenantField, 38)->index()->nullable()->after('user_id');
         });
-        Schema::table('process_approval_statuses', static function (Blueprint $table) {
+        Schema::table('process_approval_statuses', static function (Blueprint $table) use($tenantField) {
             $table->string($tenantField, 38)->index()->nullable()->after('creator_id');
         });
     }
@@ -30,17 +30,17 @@ return new class extends Migration
     {
         $tenantField = config('process_approval.multi_tenancy_field', 'tenant_id');
         if(Schema::hasColumn('process_approval_flow_steps', 'tenant_id')) {
-            Schema::table('process_approval_flow_steps', static function (Blueprint $table) {
+            Schema::table('process_approval_flow_steps', static function (Blueprint $table) use($tenantField) {
                 $table->dropColumn($tenantField);
             });
         }
         if(Schema::hasColumn('process_approvals', 'tenant_id')) {
-            Schema::table('process_approvals', static function (Blueprint $table) {
+            Schema::table('process_approvals', static function (Blueprint $table) use($tenantField) {
                 $table->dropColumn($tenantField);
             });
         }
         if(Schema::hasColumn('process_approval_statuses', 'tenant_id')) {
-            Schema::table('process_approval_statuses', static function (Blueprint $table) {
+            Schema::table('process_approval_statuses', static function (Blueprint $table) use($tenantField) {
                 $table->dropColumn($tenantField);
             });
         }

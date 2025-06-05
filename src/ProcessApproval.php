@@ -110,11 +110,12 @@ class ProcessApproval implements ProcessApprovalContract
         if(!$flow){
             throw ApprovalFlowDoesNotExistsException::create();
         }
+        $tenantField = config('process_approval.multi_tenancy_field', 'tenant_id');
         return $flow->steps()->create([
             'role_id' => $roleId,
             'action' => $action,
             'active' => 1,
-            'tenant_id' => $tenantId ?? null
+            $tenantField => $tenantId ?? null
         ]);
     }
 }
